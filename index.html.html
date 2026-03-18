@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Readiness Assessment | UK Gov Framework</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Cormorant+SC:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap');
+
+  /* ─────────────────────────────────────────────────────────
+     DESIGN SYSTEM — Excellence · Trust · Elegance
+     
+     Midnight Navy   #0B1829  deep authoritative base
+     Navy Mid        #112240  cards on dark surfaces
+     Navy Lift       #1A3354  elevated panels
+     Silver Cloud    #F7F9FC  page background
+     Pure White      #FFFFFF  card surfaces
+     Silver Rule     #DDE3EC  borders, dividers
+     Silver Muted    #8A96A8  secondary text
+     Silver Deep     #5C6878  body text on light
+     Gold Accent     #C9A84C  single prestige accent
+     Gold Light      #E8C97A  hover / glow states
+     Midnight Text   #0B1829  primary text on light
+  ────────────────────────────────────────────────────────── */
+
+  :root {
+    --navy-deep:   #0B1829;
+    --navy-mid:    #112240;
+    --navy-lift:   #1A3354;
+    --silver-bg:   #F7F9FC;
+    --white:       #FFFFFF;
+    --rule:        #DDE3EC;
+    --silver-mute: #8A96A8;
+    --silver-body: #5C6878;
+    --gold:        #C9A84C;
+    --gold-light:  #E8C97A;
+    --gold-dim:    rgba(201,168,76,0.15);
+    --ink:         #0B1829;
+    --shadow-sm:   0 1px 4px rgba(11,24,41,0.06), 0 2px 12px rgba(11,24,41,0.04);
+    --shadow-md:   0 4px 20px rgba(11,24,41,0.09), 0 1px 4px rgba(11,24,41,0.05);
+    --shadow-lg:   0 12px 40px rgba(11,24,41,0.14), 0 2px 8px rgba(11,24,41,0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── TYPOGRAPHIC SYSTEM ──────────────────────────────────
+     
+     Two voices, one conversation:
+     
+     CORMORANT GARAMOND — the authority voice
+       Used for: page title, section titles, intro heading,
+       score display, results tier, CTA heading, stat numbers.
+       Feel: editorial gravitas, intellectual confidence,
+       the kind of typeface that appears on royal warrants
+       and annual reports. Weight 300–500 only — never heavy.
+     
+     CORMORANT SC — small caps companion
+       Used for: domain labels, question counters,
+       progress indicators. Creates a refined hierarchy
+       that feels engraved, not printed.
+     
+     INTER — the precision voice
+       Used for: question text, answer options, body copy,
+       all navigational and functional UI text.
+       Feel: Swiss precision, clinical clarity, trusted.
+       Weight 300 (captions) → 400 (body) → 500 (emphasis)
+       → 600 (labels / buttons only). Never 700+.
+     
+     Tracking rules:
+       Display (Cormorant): -0.02em to 0em — tight, refined
+       Labels (Inter caps): +0.16em to +0.22em — airy, formal
+       Body (Inter): 0 to +0.01em — neutral, readable
+     
+     Scale:
+       xs:   10–11px  — metadata, badges, counters
+       sm:   12–13px  — captions, context, secondary
+       base: 14–15px  — body, answer options
+       md:   1.2–1.4rem — subheadings, section titles
+       lg:   1.6–2rem  — intro heading, score
+       xl:   2.4–3rem  — page h1
+  ────────────────────────────────────────────────────────── */
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--silver-bg);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.005em;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy-deep);
+    color: var(--white);
+    padding: 3rem 3.5rem 2.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Subtle geometric texture — refined, not loud */
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 95% 10%, rgba(201,168,76,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 5% 90%, rgba(26,51,84,0.6) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  /* Gold hairline bottom border — a signature detail */
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold-light) 50%, var(--gold) 70%, transparent 100%);
+    opacity: 0.6;
+  }
+  .header-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0.9;
+  }
+  .header-tag::before {
+    content: '';
+    display: block;
+    width: 28px; height: 1px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+    font-weight: 300;
+    line-height: 1.08;
+    max-width: 640px;
+    margin-bottom: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+  h1 span {
+    color: var(--gold-light);
+    font-style: italic;
+    font-weight: 400;
+  }
+  .header-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(215,225,240,0.65);
+    max-width: 540px;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    letter-spacing: 0.015em;
+  }
+  .framework-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 2px;
+    border: 1px solid rgba(201,168,76,0.22);
+    color: rgba(215,225,240,0.45);
+    background: rgba(255,255,255,0.02);
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap {
+    background: var(--white);
+    padding: 0.85rem 3.5rem;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .progress-label {
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    color: var(--silver-mute);
+    white-space: nowrap;
+    min-width: 90px;
+  }
+  .progress-track {
+    flex: 1;
+    height: 2px;
+    background: var(--rule);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+    border-radius: 1px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+  .progress-count {
+    font-family: 'Cormorant SC', serif;
+    font-size: 11.5px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--silver-body);
+    white-space: nowrap;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2.75rem 2rem 5rem;
+  }
+
+  /* ── SECTION CARDS ── */
+  .section-card {
+    display: none;
+    animation: fadeSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .section-card.active { display: block; }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section-icon {
+    width: 46px; height: 46px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    margin-top: 3px;
+    background: var(--navy-deep);
+    box-shadow: var(--shadow-sm);
+  }
+  .section-meta { flex: 1; }
+  .section-category {
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    margin-bottom: 0.35rem;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.65rem;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 0.45rem;
+    letter-spacing: -0.015em;
+  }
+  .section-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--silver-mute);
+    font-style: normal;
+    line-height: 1.75;
+    letter-spacing: 0.015em;
+  }
+
+  /* ── QUESTION BLOCKS ── */
+  .question-block {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem 1.75rem;
+    background: var(--white);
+    border-radius: 4px;
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .question-block:hover {
+    border-color: rgba(201,168,76,0.4);
+    box-shadow: var(--shadow-md);
+  }
+  .question-block.answered {
+    border-color: var(--gold);
+    border-left-width: 3px;
+    background: var(--white);
+    box-shadow: 0 2px 16px rgba(201,168,76,0.08);
+  }
+
+  .question-num {
+    font-family: 'Cormorant SC', serif;
+    font-size: 10.5px;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    color: var(--silver-mute);
+    margin-bottom: 0.55rem;
+  }
+  .question-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+  }
+  .question-context {
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px;
+    font-weight: 300;
+    color: var(--silver-mute);
+    margin-bottom: 1.1rem;
+    font-style: normal;
+    line-height: 1.7;
+    border-left: 1px solid var(--gold);
+    border-left-opacity: 0.3;
+    padding-left: 0.85rem;
+    border-left-color: rgba(201,168,76,0.3);
+    letter-spacing: 0.01em;
+  }
+
+  .answer-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .answer-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    background: var(--silver-bg);
+  }
+  .answer-option:hover {
+    border-color: rgba(201,168,76,0.5);
+    background: var(--white);
+    box-shadow: 0 1px 6px rgba(201,168,76,0.08);
+  }
+  .answer-option input[type="radio"] { display: none; }
+  .radio-dot {
+    width: 15px; height: 15px;
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+    flex-shrink: 0;
+    margin-top: 3px;
+    transition: all 0.18s ease;
+  }
+  .answer-option:has(input:checked) .radio-dot {
+    border-color: var(--gold);
+    background: var(--gold);
+    box-shadow: inset 0 0 0 3px var(--white), 0 0 0 1px var(--gold);
+  }
+  .answer-option:has(input:checked) {
+    border-color: var(--gold);
+    background: var(--white);
+    box-shadow: 0 2px 12px rgba(201,168,76,0.1);
+  }
+  .answer-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--silver-body);
+    letter-spacing: 0.005em;
+  }
+  .answer-option:has(input:checked) .answer-label {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ── NAV BUTTONS ── */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2.25rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.85rem 2.1rem;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+  }
+  .btn-back {
+    background: transparent;
+    color: var(--silver-mute);
+    border: 1px solid var(--rule);
+  }
+  .btn-back:hover {
+    border-color: var(--silver-body);
+    color: var(--ink);
+    background: var(--white);
+  }
+  .btn-next {
+    background: var(--navy-deep);
+    color: var(--white);
+    border: 1px solid var(--navy-deep);
+    box-shadow: 0 2px 8px rgba(11,24,41,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-next::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+    opacity: 0;
+    transition: opacity 0.22s;
+  }
+  .btn-next:hover {
+    background: var(--navy-lift);
+    box-shadow: 0 4px 16px rgba(11,24,41,0.25);
+  }
+  .btn-next:hover::after { opacity: 1; }
+  .btn-next:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* ── RESULTS ── */
+  #results { display: none; }
+  #results.active { display: block; }
+
+  .results-header {
+    text-align: center;
+    padding: 2.5rem 0 2.5rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 2.5rem;
+  }
+  .score-ring {
+    width: 130px; height: 130px;
+    margin: 0 auto 1.75rem;
+    position: relative;
+  }
+  .score-ring svg { width: 100%; height: 100%; }
+  .score-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .score-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.7rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+  }
+  .score-denom {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--silver-mute);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .results-tier {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 0.65rem;
+    letter-spacing: -0.015em;
+  }
+  .results-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--silver-body);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── DIMENSION CARDS ── */
+  .dimensions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  @media (max-width: 600px) { .dimensions-grid { grid-template-columns: 1fr; } }
+
+  .dimension-card {
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+  }
+  .dim-label {
+    font-family: 'Cormorant SC', serif;
+    font-size: 10.5px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    color: var(--silver-body);
+    margin-bottom: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .dim-pct {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: -0.01em;
+    font-style: italic;
+  }
+  .dim-track {
+    height: 3px;
+    background: var(--rule);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0.65rem;
+  }
+  .dim-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+    width: 0%;
+  }
+  .fill-tech       { background: linear-gradient(90deg, #1A3354, #2E6DA4); }
+  .fill-ethics     { background: linear-gradient(90deg, #1A3354, #1A6A8A); }
+  .fill-leadership { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+  .fill-change     { background: linear-gradient(90deg, #0B1829, #1A3354); }
+  .fill-data       { background: linear-gradient(90deg, #1A3354, #3A7FC0); }
+  .dim-status { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; }
+  .status-strong    { color: var(--gold); }
+  .status-developing { color: #2E6DA4; }
+  .status-gap        { color: var(--silver-body); }
+
+  /* ── RECOMMENDATIONS ── */
+  .rec-section { margin-bottom: 2rem; }
+  .rec-section-title {
+    font-family: 'Cormorant SC', serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    color: var(--silver-mute);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .rec-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+  .rec-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1.1rem 1.4rem;
+    border-left: 2px solid var(--rule);
+    margin-bottom: 0.65rem;
+    background: var(--white);
+    border-radius: 0 4px 4px 0;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+  }
+  .rec-item:hover { box-shadow: var(--shadow-md); }
+  .rec-item.priority   { border-left-color: var(--gold); }
+  .rec-item.develop    { border-left-color: #2E6DA4; }
+  .rec-item.strength   { border-left-color: #C8D8E8; }
+  .rec-icon { font-size: 1.15rem; flex-shrink: 0; margin-top: 1px; }
+  .rec-title { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 1.05rem; margin-bottom: 0.3rem; color: var(--ink); letter-spacing: -0.01em; line-height: 1.3; }
+  .rec-body  { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 300; color: var(--silver-body); line-height: 1.75; letter-spacing: 0.01em; }
+
+  /* ── CTA FOOTER ── */
+  .results-cta {
+    background: var(--navy-deep);
+    color: var(--white);
+    padding: 2.25rem 2.5rem;
+    border-radius: 4px;
+    margin-top: 2.5rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .results-cta::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+    opacity: 0.5;
+  }
+  .cta-text { flex: 1; }
+  .cta-text h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+    letter-spacing: -0.015em;
+  }
+  .cta-text p {
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 300;
+    color: rgba(215,225,240,0.6);
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+  }
+  .cta-pill {
+    background: transparent;
+    color: var(--gold-light);
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.75rem;
+    border-radius: 2px;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 1px solid rgba(201,168,76,0.45);
+    flex-shrink: 0;
+    transition: all 0.22s ease;
+  }
+  .cta-pill:hover {
+    background: var(--gold-dim);
+    border-color: var(--gold-light);
+    color: var(--white);
+  }
+
+  .restart-btn {
+    display: block;
+    margin: 1.5rem auto 0;
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--silver-mute);
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.75rem;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .restart-btn:hover {
+    border-color: var(--silver-body);
+    color: var(--ink);
+    background: var(--white);
+  }
+
+  /* ── INTRO ── */
+  .intro-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 2.75rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+  }
+  .intro-card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.55rem;
+    font-weight: 400;
+    margin-bottom: 0.85rem;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .intro-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.75rem 0;
+  }
+  @media (max-width: 600px) { .intro-grid { grid-template-columns: 1fr; } }
+  .intro-stat {
+    text-align: center;
+    padding: 1.25rem 1rem;
+    background: var(--navy-deep);
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+  }
+  .intro-stat::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.4;
+  }
+  .intro-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--gold-light);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.45rem;
+    letter-spacing: -0.02em;
+  }
+  .intro-stat-label {
+    font-size: 11px;
+    color: rgba(215,225,240,0.6);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  .start-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    background: var(--navy-deep);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 1rem 2.25rem;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid var(--navy-deep);
+    transition: all 0.22s ease;
+    margin-top: 1.75rem;
+    box-shadow: 0 2px 10px rgba(11,24,41,0.18);
+    position: relative;
+    overflow: hidden;
+  }
+  .start-btn::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+    opacity: 0;
+    transition: opacity 0.22s;
+  }
+  .start-btn:hover {
+    background: var(--navy-lift);
+    box-shadow: 0 4px 18px rgba(11,24,41,0.24);
+  }
+  .start-btn:hover::before { opacity: 1; }
+  .start-btn::after { content: '→'; font-size: 1rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-tag">Aligned to UK Gov · Skills England · Alan Turing Institute · DSIT 2025</div>
+  <h1>AI Readiness<br><span>Skills Assessment</span></h1>
+  <p class="header-sub">Based on the UK Government AI Skills Competency Framework — evaluate your organisation's capability across all five domains required for successful AI adoption and change.</p>
+  <div class="framework-badges">
+    <span class="badge">Technical AI Skills</span>
+    <span class="badge">Responsible & Ethical AI</span>
+    <span class="badge">Non-Technical AI Skills</span>
+    <span class="badge">Change Readiness</span>
+    <span class="badge">Data & Governance</span>
+  </div>
+</div>
+
+<div class="progress-bar-wrap" id="progressWrap" style="display:none">
+  <span class="progress-label" id="sectionLabel">Section 1/5</span>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <span class="progress-count" id="progressCount">0 / 20 answered</span>
+</div>
+
+<div class="main">
+
+  <!-- INTRO -->
+  <div id="intro">
+    <div class="intro-card">
+      <h2>Why this assessment matters</h2>
+      <p style="color:var(--silver-body);font-size:14px;margin-bottom:0.5rem;">The UK Government's AI Skills Competency Framework (DSIT/Skills England, 2025) identifies the exact competencies businesses need to adopt AI successfully — yet most organisations are flying blind.</p>
+      <div class="intro-grid">
+        <div class="intro-stat">
+          <span class="intro-stat-num">1 in 6</span>
+          <span class="intro-stat-label">UK businesses currently using AI (mid-2025)</span>
+        </div>
+        <div class="intro-stat">
+          <span class="intro-stat-num">21%</span>
+          <span class="intro-stat-label">of UK workers feel confident using AI at work</span>
+        </div>
+        <div class="intro-stat">
+          <span class="intro-stat-num">45%</span>
+          <span class="intro-stat-label">less likely: SMEs vs large firms to adopt AI</span>
+        </div>
+      </div>
+      <p style="font-size:14px;color:var(--silver-body);">This 20-question diagnostic maps your organisation against the framework's five domains: technical skills, responsible AI, non-technical competencies, change management readiness, and data governance. Takes 4–6 minutes.</p>
+      <button class="start-btn" onclick="startAssessment()">Begin Assessment</button>
+    </div>
+  </div>
+
+  <!-- SECTION 1: TECHNICAL AI SKILLS -->
+  <div class="section-card" id="section-1">
+    <div class="section-header">
+      <div class="section-icon icon-tech">⚙️</div>
+      <div class="section-meta">
+        <div class="section-category">Domain 1 of 5</div>
+        <div class="section-title">Technical AI Skills</div>
+        <div class="section-desc">Practical competencies to operate, monitor and guide AI systems — from prompt writing to workflow automation (Framework: Technical domain, all job levels)</div>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-1">
+      <div class="question-num">Question 1 of 20</div>
+      <div class="question-text">Can staff across your organisation write effective, structured prompts to generate useful outputs from AI tools?</div>
+      <div class="question-context">Framework ref: "Write prompts for AI tools" — entry-level technical skill required at all levels</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q1" value="3" onchange="recordAnswer(1,3)"><span class="radio-dot"></span><span class="answer-label">Yes — most staff can do this confidently across the organisation</span></label>
+        <label class="answer-option"><input type="radio" name="q1" value="2" onchange="recordAnswer(1,2)"><span class="radio-dot"></span><span class="answer-label">Partially — some staff can, but it's inconsistent</span></label>
+        <label class="answer-option"><input type="radio" name="q1" value="1" onchange="recordAnswer(1,1)"><span class="radio-dot"></span><span class="answer-label">Rarely — only a few technical individuals</span></label>
+        <label class="answer-option"><input type="radio" name="q1" value="0" onchange="recordAnswer(1,0)"><span class="radio-dot"></span><span class="answer-label">No — this is not a current capability</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-2">
+      <div class="question-num">Question 2 of 20</div>
+      <div class="question-text">Are AI tools actively integrated into day-to-day workflows (scheduling, reporting, summarisation, customer comms)?</div>
+      <div class="question-context">Framework ref: "Apply AI tools in workflows" and "Set AI tools for task automation" — operational integration</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q2" value="3" onchange="recordAnswer(2,3)"><span class="radio-dot"></span><span class="answer-label">Yes — AI tools are embedded in multiple workflows with clear ownership</span></label>
+        <label class="answer-option"><input type="radio" name="q2" value="2" onchange="recordAnswer(2,2)"><span class="radio-dot"></span><span class="answer-label">Partially — used by some teams but not systematically</span></label>
+        <label class="answer-option"><input type="radio" name="q2" value="1" onchange="recordAnswer(2,1)"><span class="radio-dot"></span><span class="answer-label">Experimental — being trialled but not yet embedded</span></label>
+        <label class="answer-option"><input type="radio" name="q2" value="0" onchange="recordAnswer(2,0)"><span class="radio-dot"></span><span class="answer-label">No — AI tools are not part of our current workflows</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-3">
+      <div class="question-num">Question 3 of 20</div>
+      <div class="question-text">Can your team use AI-powered analytics or dashboard tools to generate data insights without specialist data science expertise?</div>
+      <div class="question-context">Framework ref: "Analyse data using AI tools" — supports evidence-based decisions without specialist skills</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q3" value="3" onchange="recordAnswer(3,3)"><span class="radio-dot"></span><span class="answer-label">Yes — multiple team members do this regularly</span></label>
+        <label class="answer-option"><input type="radio" name="q3" value="2" onchange="recordAnswer(3,2)"><span class="radio-dot"></span><span class="answer-label">Partially — capability exists but isn't widely used</span></label>
+        <label class="answer-option"><input type="radio" name="q3" value="1" onchange="recordAnswer(3,1)"><span class="radio-dot"></span><span class="answer-label">Limited — we rely on external analysts or one person</span></label>
+        <label class="answer-option"><input type="radio" name="q3" value="0" onchange="recordAnswer(3,0)"><span class="radio-dot"></span><span class="answer-label">No — we don't use AI for data analysis</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-4">
+      <div class="question-num">Question 4 of 20</div>
+      <div class="question-text">Does your business use low-code or no-code AI automation platforms to streamline repetitive processes?</div>
+      <div class="question-context">Framework ref: "Use low-code automation tools" — enables efficiency without coding knowledge</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q4" value="3" onchange="recordAnswer(4,3)"><span class="radio-dot"></span><span class="answer-label">Yes — actively in use across multiple departments</span></label>
+        <label class="answer-option"><input type="radio" name="q4" value="2" onchange="recordAnswer(4,2)"><span class="radio-dot"></span><span class="answer-label">Some — we have explored or piloted one tool</span></label>
+        <label class="answer-option"><input type="radio" name="q4" value="1" onchange="recordAnswer(4,1)"><span class="radio-dot"></span><span class="answer-label">Aware but not implemented</span></label>
+        <label class="answer-option"><input type="radio" name="q4" value="0" onchange="recordAnswer(4,0)"><span class="radio-dot"></span><span class="answer-label">Not on our radar</span></label>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <div></div>
+      <button class="btn btn-next" id="next-1" onclick="goToSection(2)" disabled>Continue →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 2: RESPONSIBLE & ETHICAL AI -->
+  <div class="section-card" id="section-2">
+    <div class="section-header">
+      <div class="section-icon icon-ethics">⚖️</div>
+      <div class="section-meta">
+        <div class="section-category">Domain 2 of 5</div>
+        <div class="section-title">Responsible & Ethical AI</div>
+        <div class="section-desc">Upholding ethical principles, GDPR compliance, bias detection, and governance accountability (Framework: Responsible & Ethical domain)</div>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-5">
+      <div class="question-num">Question 5 of 20</div>
+      <div class="question-text">Is there a named executive or senior leader accountable for AI ethics and governance in your organisation?</div>
+      <div class="question-context">Framework ref: "Who at the executive level is responsible?" — governance accountability gap identified by AI policy advisors</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q5" value="3" onchange="recordAnswer(5,3)"><span class="radio-dot"></span><span class="answer-label">Yes — a named owner with a clear remit</span></label>
+        <label class="answer-option"><input type="radio" name="q5" value="2" onchange="recordAnswer(5,2)"><span class="radio-dot"></span><span class="answer-label">Informal — it sits with CTO/IT without formal accountability</span></label>
+        <label class="answer-option"><input type="radio" name="q5" value="1" onchange="recordAnswer(5,1)"><span class="radio-dot"></span><span class="answer-label">Under discussion — we know it's needed but not assigned</span></label>
+        <label class="answer-option"><input type="radio" name="q5" value="0" onchange="recordAnswer(5,0)"><span class="radio-dot"></span><span class="answer-label">No — AI governance isn't on the leadership agenda</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-6">
+      <div class="question-num">Question 6 of 20</div>
+      <div class="question-text">Do your staff know how to identify and flag potential bias in AI-generated outputs (e.g. in recruitment, customer decisions, content)?</div>
+      <div class="question-context">Framework ref: "Identify bias in AI outputs" — prevents harm in decisions affecting individuals and communities</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q6" value="3" onchange="recordAnswer(6,3)"><span class="radio-dot"></span><span class="answer-label">Yes — training completed and processes in place</span></label>
+        <label class="answer-option"><input type="radio" name="q6" value="2" onchange="recordAnswer(6,2)"><span class="radio-dot"></span><span class="answer-label">Awareness exists but no formal process</span></label>
+        <label class="answer-option"><input type="radio" name="q6" value="1" onchange="recordAnswer(6,1)"><span class="radio-dot"></span><span class="answer-label">Limited — only a few people would know how</span></label>
+        <label class="answer-option"><input type="radio" name="q6" value="0" onchange="recordAnswer(6,0)"><span class="radio-dot"></span><span class="answer-label">No — this is not addressed in our AI use</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-7">
+      <div class="question-num">Question 7 of 20</div>
+      <div class="question-text">Does your organisation have documented policies on GDPR compliance specifically in relation to AI systems handling personal data?</div>
+      <div class="question-context">Framework ref: "Apply data protection principles" — GDPR compliance is legal and reputational risk management</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q7" value="3" onchange="recordAnswer(7,3)"><span class="radio-dot"></span><span class="answer-label">Yes — AI-specific GDPR policy exists and is communicated</span></label>
+        <label class="answer-option"><input type="radio" name="q7" value="2" onchange="recordAnswer(7,2)"><span class="radio-dot"></span><span class="answer-label">We use general GDPR policy but not AI-specific guidance</span></label>
+        <label class="answer-option"><input type="radio" name="q7" value="1" onchange="recordAnswer(7,1)"><span class="radio-dot"></span><span class="answer-label">Being developed — we know we need this</span></label>
+        <label class="answer-option"><input type="radio" name="q7" value="0" onchange="recordAnswer(7,0)"><span class="radio-dot"></span><span class="answer-label">No formal policy exists</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-8">
+      <div class="question-num">Question 8 of 20</div>
+      <div class="question-text">Are staff empowered and trained to intervene or escalate when AI outputs seem incorrect, harmful, or inappropriate?</div>
+      <div class="question-context">Framework ref: "Guide responses to inappropriate AI decisions" — prevents over-reliance on AI in sensitive contexts</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q8" value="3" onchange="recordAnswer(8,3)"><span class="radio-dot"></span><span class="answer-label">Yes — clear escalation paths and training in place</span></label>
+        <label class="answer-option"><input type="radio" name="q8" value="2" onchange="recordAnswer(8,2)"><span class="radio-dot"></span><span class="answer-label">Informally — people would speak up but no formal route</span></label>
+        <label class="answer-option"><input type="radio" name="q8" value="1" onchange="recordAnswer(8,1)"><span class="radio-dot"></span><span class="answer-label">Unlikely — AI is assumed to be correct</span></label>
+        <label class="answer-option"><input type="radio" name="q8" value="0" onchange="recordAnswer(8,0)"><span class="radio-dot"></span><span class="answer-label">No — we have not addressed human oversight of AI</span></label>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goToSection(1)">← Back</button>
+      <button class="btn btn-next" id="next-2" onclick="goToSection(3)" disabled>Continue →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3: NON-TECHNICAL AI SKILLS -->
+  <div class="section-card" id="section-3">
+    <div class="section-header">
+      <div class="section-icon icon-leadership">🧠</div>
+      <div class="section-meta">
+        <div class="section-category">Domain 3 of 5</div>
+        <div class="section-title">Non-Technical AI Skills & Leadership</div>
+        <div class="section-desc">Critical thinking, AI literacy, strategy planning, peer learning and executive modelling of AI behaviours (Framework: Non-technical domain — most urgently needed)</div>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-9">
+      <div class="question-num">Question 9 of 20</div>
+      <div class="question-text">Can your senior leaders articulate a clear AI strategy — including goals, responsible use expectations, and success metrics?</div>
+      <div class="question-context">Framework ref: "Plan AI strategy and responsible use expectations" — managerial-level non-technical skill</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q9" value="3" onchange="recordAnswer(9,3)"><span class="radio-dot"></span><span class="answer-label">Yes — documented AI strategy with KPIs, shared with the team</span></label>
+        <label class="answer-option"><input type="radio" name="q9" value="2" onchange="recordAnswer(9,2)"><span class="radio-dot"></span><span class="answer-label">Partial — high-level intent exists but no formal strategy</span></label>
+        <label class="answer-option"><input type="radio" name="q9" value="1" onchange="recordAnswer(9,1)"><span class="radio-dot"></span><span class="answer-label">Vague — AI is on the agenda but direction is unclear</span></label>
+        <label class="answer-option"><input type="radio" name="q9" value="0" onchange="recordAnswer(9,0)"><span class="radio-dot"></span><span class="answer-label">No — no AI strategy exists at leadership level</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-10">
+      <div class="question-num">Question 10 of 20</div>
+      <div class="question-text">Do your leaders personally use and model AI tools — demonstrating effective, ethical use to their teams?</div>
+      <div class="question-context">Framework ref: Leaders "should model effective and ethical use for others" — executive behaviour shapes organisational culture</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q10" value="3" onchange="recordAnswer(10,3)"><span class="radio-dot"></span><span class="answer-label">Yes — leaders actively use AI and discuss it openly with teams</span></label>
+        <label class="answer-option"><input type="radio" name="q10" value="2" onchange="recordAnswer(10,2)"><span class="radio-dot"></span><span class="answer-label">Some leaders do, but it's not universal or visible</span></label>
+        <label class="answer-option"><input type="radio" name="q10" value="1" onchange="recordAnswer(10,1)"><span class="radio-dot"></span><span class="answer-label">Leadership defers AI to technical teams</span></label>
+        <label class="answer-option"><input type="radio" name="q10" value="0" onchange="recordAnswer(10,0)"><span class="radio-dot"></span><span class="answer-label">No — AI is seen as an IT matter, not a leadership one</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-11">
+      <div class="question-num">Question 11 of 20</div>
+      <div class="question-text">Does your organisation have a culture of peer learning around AI — where staff share discoveries, tools, and best practices informally?</div>
+      <div class="question-context">Framework ref: "Adapt to new AI tools and contribute to peer learning" — builds team competencies inclusively</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q11" value="3" onchange="recordAnswer(11,3)"><span class="radio-dot"></span><span class="answer-label">Yes — active knowledge sharing happens across teams</span></label>
+        <label class="answer-option"><input type="radio" name="q11" value="2" onchange="recordAnswer(11,2)"><span class="radio-dot"></span><span class="answer-label">Some — pockets of sharing but not consistent</span></label>
+        <label class="answer-option"><input type="radio" name="q11" value="1" onchange="recordAnswer(11,1)"><span class="radio-dot"></span><span class="answer-label">Rarely — people work in silos around AI tools</span></label>
+        <label class="answer-option"><input type="radio" name="q11" value="0" onchange="recordAnswer(11,0)"><span class="radio-dot"></span><span class="answer-label">No — AI learning is individual and uncoordinated</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-12">
+      <div class="question-num">Question 12 of 20</div>
+      <div class="question-text">How well does your organisation critically evaluate AI tool outputs rather than accepting them at face value?</div>
+      <div class="question-context">Framework ref: "Critical thinking, subjective reasoning" — cited as most urgently needed and least addressed</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q12" value="3" onchange="recordAnswer(12,3)"><span class="radio-dot"></span><span class="answer-label">Strong — critical evaluation is embedded in how we use AI</span></label>
+        <label class="answer-option"><input type="radio" name="q12" value="2" onchange="recordAnswer(12,2)"><span class="radio-dot"></span><span class="answer-label">Variable — some staff question outputs, many don't</span></label>
+        <label class="answer-option"><input type="radio" name="q12" value="1" onchange="recordAnswer(12,1)"><span class="radio-dot"></span><span class="answer-label">Weak — AI outputs are generally trusted without scrutiny</span></label>
+        <label class="answer-option"><input type="radio" name="q12" value="0" onchange="recordAnswer(12,0)"><span class="radio-dot"></span><span class="answer-label">Not applicable — AI isn't widely used yet</span></label>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goToSection(2)">← Back</button>
+      <button class="btn btn-next" id="next-3" onclick="goToSection(4)" disabled>Continue →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 4: CHANGE MANAGEMENT -->
+  <div class="section-card" id="section-4">
+    <div class="section-header">
+      <div class="section-icon icon-change">🔄</div>
+      <div class="section-meta">
+        <div class="section-category">Domain 4 of 5</div>
+        <div class="section-title">Change Management & Adoption Readiness</div>
+        <div class="section-desc">Organisational readiness to navigate the AI adoption pathway — from curiosity through to strategic scaling (Framework: AI Skills Adoption Pathway, 9 stages)</div>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-13">
+      <div class="question-num">Question 13 of 20</div>
+      <div class="question-text">Where would you honestly place your organisation on the AI adoption journey?</div>
+      <div class="question-context">Framework ref: Skills England's 9-stage AI Adoption Pathway from "Curiosity" to "Strategic Scaling"</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q13" value="3" onchange="recordAnswer(13,3)"><span class="radio-dot"></span><span class="answer-label">Scaling — AI is deployed across multiple functions, generating measurable ROI</span></label>
+        <label class="answer-option"><input type="radio" name="q13" value="2" onchange="recordAnswer(13,2)"><span class="radio-dot"></span><span class="answer-label">Embedding — AI is running in some departments and we're expanding</span></label>
+        <label class="answer-option"><input type="radio" name="q13" value="1" onchange="recordAnswer(13,1)"><span class="radio-dot"></span><span class="answer-label">Experimenting — we're piloting tools but haven't embedded them</span></label>
+        <label class="answer-option"><input type="radio" name="q13" value="0" onchange="recordAnswer(13,0)"><span class="radio-dot"></span><span class="answer-label">Exploring — we're curious but haven't seriously started</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-14">
+      <div class="question-num">Question 14 of 20</div>
+      <div class="question-text">Does your organisation have a structured approach to identifying and addressing resistance to AI adoption among staff?</div>
+      <div class="question-context">Framework ref: Inclusive adoption — "hesitation in adopting AI due to concerns over managing ethical risks" is a key risk to address</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q14" value="3" onchange="recordAnswer(14,3)"><span class="radio-dot"></span><span class="answer-label">Yes — change management plans include AI-specific resistance strategies</span></label>
+        <label class="answer-option"><input type="radio" name="q14" value="2" onchange="recordAnswer(14,2)"><span class="radio-dot"></span><span class="answer-label">Informally — we address concerns as they arise</span></label>
+        <label class="answer-option"><input type="radio" name="q14" value="1" onchange="recordAnswer(14,1)"><span class="radio-dot"></span><span class="answer-label">Limited — we are aware of resistance but don't address it systematically</span></label>
+        <label class="answer-option"><input type="radio" name="q14" value="0" onchange="recordAnswer(14,0)"><span class="radio-dot"></span><span class="answer-label">No — we haven't thought about managing resistance to AI</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-15">
+      <div class="question-num">Question 15 of 20</div>
+      <div class="question-text">Is AI upskilling built into your talent development and HR strategy — not just as one-off training events?</div>
+      <div class="question-context">Framework ref: "AI upskilling is not confined to technical specialists — it is distributed across all organisational roles"</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q15" value="3" onchange="recordAnswer(15,3)"><span class="radio-dot"></span><span class="answer-label">Yes — continuous AI learning is embedded in L&D and performance frameworks</span></label>
+        <label class="answer-option"><input type="radio" name="q15" value="2" onchange="recordAnswer(15,2)"><span class="radio-dot"></span><span class="answer-label">Partially — some training programmes exist but not systematic</span></label>
+        <label class="answer-option"><input type="radio" name="q15" value="1" onchange="recordAnswer(15,1)"><span class="radio-dot"></span><span class="answer-label">Ad hoc — individuals access training on their own initiative</span></label>
+        <label class="answer-option"><input type="radio" name="q15" value="0" onchange="recordAnswer(15,0)"><span class="radio-dot"></span><span class="answer-label">No formal AI upskilling pathway exists</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-16">
+      <div class="question-num">Question 16 of 20</div>
+      <div class="question-text">Does your business have a dedicated budget or investment plan for AI tools, infrastructure, and skills development?</div>
+      <div class="question-context">Framework ref: Managerial-level strategic competency — "decisions that shape how AI is adopted including policy, investment, and governance"</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q16" value="3" onchange="recordAnswer(16,3)"><span class="radio-dot"></span><span class="answer-label">Yes — dedicated AI budget approved and allocated</span></label>
+        <label class="answer-option"><input type="radio" name="q16" value="2" onchange="recordAnswer(16,2)"><span class="radio-dot"></span><span class="answer-label">Some — costs come from existing IT or L&D budgets</span></label>
+        <label class="answer-option"><input type="radio" name="q16" value="1" onchange="recordAnswer(16,1)"><span class="radio-dot"></span><span class="answer-label">Minimal — only low-cost or free tools are being explored</span></label>
+        <label class="answer-option"><input type="radio" name="q16" value="0" onchange="recordAnswer(16,0)"><span class="radio-dot"></span><span class="answer-label">No — no budget has been set for AI</span></label>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goToSection(3)">← Back</button>
+      <button class="btn btn-next" id="next-4" onclick="goToSection(5)" disabled>Continue →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 5: DATA GOVERNANCE -->
+  <div class="section-card" id="section-5">
+    <div class="section-header">
+      <div class="section-icon icon-data">📊</div>
+      <div class="section-meta">
+        <div class="section-category">Domain 5 of 5</div>
+        <div class="section-title">Data Readiness & Governance</div>
+        <div class="section-desc">Data quality, access, security and governance as foundations for effective and responsible AI adoption (Framework: Cross-cutting competency for AI Workers and Leaders)</div>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-17">
+      <div class="question-num">Question 17 of 20</div>
+      <div class="question-text">Is your business data organised, accessible, and of sufficient quality to reliably train or feed into AI systems?</div>
+      <div class="question-context">Framework ref: Data as foundational infrastructure for AI adoption — quality data is a prerequisite for meaningful AI outputs</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q17" value="3" onchange="recordAnswer(17,3)"><span class="radio-dot"></span><span class="answer-label">Yes — clean, structured data with clear ownership and accessibility</span></label>
+        <label class="answer-option"><input type="radio" name="q17" value="2" onchange="recordAnswer(17,2)"><span class="radio-dot"></span><span class="answer-label">Partial — some good data but also silos, gaps, and quality issues</span></label>
+        <label class="answer-option"><input type="radio" name="q17" value="1" onchange="recordAnswer(17,1)"><span class="radio-dot"></span><span class="answer-label">Weak — data is fragmented, inconsistent, or hard to access</span></label>
+        <label class="answer-option"><input type="radio" name="q17" value="0" onchange="recordAnswer(17,0)"><span class="radio-dot"></span><span class="answer-label">Poor — we don't have reliable data infrastructure</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-18">
+      <div class="question-num">Question 18 of 20</div>
+      <div class="question-text">Does your organisation have clear policies on what data can and cannot be inputted into AI tools (e.g. public LLMs like ChatGPT)?</div>
+      <div class="question-context">Framework ref: Data protection and consent governance — preventing inadvertent sharing of confidential or personal data through AI tools</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q18" value="3" onchange="recordAnswer(18,3)"><span class="radio-dot"></span><span class="answer-label">Yes — written policy exists, staff are briefed, and it is enforced</span></label>
+        <label class="answer-option"><input type="radio" name="q18" value="2" onchange="recordAnswer(18,2)"><span class="radio-dot"></span><span class="answer-label">Informal — general guidance exists but not documented or enforced</span></label>
+        <label class="answer-option"><input type="radio" name="q18" value="1" onchange="recordAnswer(18,1)"><span class="radio-dot"></span><span class="answer-label">Unclear — different staff are making their own judgements</span></label>
+        <label class="answer-option"><input type="radio" name="q18" value="0" onchange="recordAnswer(18,0)"><span class="radio-dot"></span><span class="answer-label">No policy — staff use AI tools with sensitive data freely</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-19">
+      <div class="question-num">Question 19 of 20</div>
+      <div class="question-text">Does your organisation measure the impact of AI tools deployed — tracking ROI, productivity gains, or quality outcomes?</div>
+      <div class="question-context">Framework ref: Managerial-level competency — evidence-based decisions on AI investment and governance require outcome measurement</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q19" value="3" onchange="recordAnswer(19,3)"><span class="radio-dot"></span><span class="answer-label">Yes — KPIs and measurement frameworks are in place for AI</span></label>
+        <label class="answer-option"><input type="radio" name="q19" value="2" onchange="recordAnswer(19,2)"><span class="radio-dot"></span><span class="answer-label">Informally — we track some outcomes but not systematically</span></label>
+        <label class="answer-option"><input type="radio" name="q19" value="1" onchange="recordAnswer(19,1)"><span class="radio-dot"></span><span class="answer-label">We intend to but haven't started</span></label>
+        <label class="answer-option"><input type="radio" name="q19" value="0" onchange="recordAnswer(19,0)"><span class="radio-dot"></span><span class="answer-label">No — AI use is not being measured</span></label>
+      </div>
+    </div>
+
+    <div class="question-block" id="qb-20">
+      <div class="question-num">Question 20 of 20</div>
+      <div class="question-text">Are AI tool procurement decisions made with an assessment of vendor AI practices, including their responsible AI commitments?</div>
+      <div class="question-context">Framework ref: AI Leader competency — "senior responsibility for procurement and governance of AI solutions"</div>
+      <div class="answer-group">
+        <label class="answer-option"><input type="radio" name="q20" value="3" onchange="recordAnswer(20,3)"><span class="radio-dot"></span><span class="answer-label">Yes — responsible AI criteria are in our procurement checklist</span></label>
+        <label class="answer-option"><input type="radio" name="q20" value="2" onchange="recordAnswer(20,2)"><span class="radio-dot"></span><span class="answer-label">Sometimes — we consider it but it's not a formal requirement</span></label>
+        <label class="answer-option"><input type="radio" name="q20" value="1" onchange="recordAnswer(20,1)"><span class="radio-dot"></span><span class="answer-label">Rarely — procurement is primarily cost and feature driven</span></label>
+        <label class="answer-option"><input type="radio" name="q20" value="0" onchange="recordAnswer(20,0)"><span class="radio-dot"></span><span class="answer-label">No — we haven't considered this</span></label>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goToSection(4)">← Back</button>
+      <button class="btn btn-next" id="next-5" onclick="showResults()" disabled>View My Results →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+    <div class="results-header">
+      <div class="score-ring">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#DDE3EC" stroke-width="6"/>
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#C9A84C" stroke-width="6"
+            stroke-dasharray="314" stroke-dashoffset="314"
+            stroke-linecap="round" transform="rotate(-90 60 60)"
+            id="scoreCircle"/>
+        </svg>
+        <div class="score-text">
+          <span class="score-num" id="scoreNum">0</span>
+          <span class="score-denom">/60</span>
+        </div>
+      </div>
+      <div class="results-tier" id="resultsTier">Calculating...</div>
+      <div class="results-subtitle" id="resultsSubtitle"></div>
+    </div>
+
+    <div class="rec-section">
+      <div class="rec-section-title">Your AI Readiness by Domain</div>
+      <div class="dimensions-grid" id="dimensionsGrid"></div>
+    </div>
+
+    <div id="recommendationsContainer"></div>
+
+    <div class="results-cta">
+      <div class="cta-text">
+        <h3>Get your personalised AI Transformation Roadmap</h3>
+        <p>Based on your results, our consultants can map a tailored pathway aligned to the UK Government framework — identifying priority upskilling, governance gaps, and a phased AI adoption plan for your business.</p>
+      </div>
+      <button class="cta-pill">Book a Discovery Call</button>
+    </div>
+
+    <button class="restart-btn" onclick="restartAssessment()">↩ Retake Assessment</button>
+  </div>
+
+</div>
+
+<script>
+  const answers = {};
+  const totalQ = 20;
+
+  const sectionMap = {
+    1: [1,2,3,4],
+    2: [5,6,7,8],
+    3: [9,10,11,12],
+    4: [13,14,15,16],
+    5: [17,18,19,20]
+  };
+
+  const dimensions = [
+    { key: 'tech', label: 'Technical AI Skills', qs: [1,2,3,4], fillClass: 'fill-tech', color: '#4db8e8' },
+    { key: 'ethics', label: 'Responsible & Ethical AI', qs: [5,6,7,8], fillClass: 'fill-ethics', color: '#1a7a9a' },
+    { key: 'leadership', label: 'Non-Technical & Leadership', qs: [9,10,11,12], fillClass: 'fill-leadership', color: '#1a4fd4' },
+    { key: 'change', label: 'Change Management', qs: [13,14,15,16], fillClass: 'fill-change', color: '#0d2e52' },
+    { key: 'data', label: 'Data & Governance', qs: [17,18,19,20], fillClass: 'fill-data', color: '#7ecef0' }
+  ];
+
+  function startAssessment() {
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('progressWrap').style.display = 'flex';
+    goToSection(1);
+  }
+
+  function goToSection(n) {
+    document.querySelectorAll('.section-card').forEach(c => c.classList.remove('active'));
+    const card = document.getElementById('section-' + n);
+    if (card) {
+      card.classList.add('active');
+      updateProgress(n);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  function recordAnswer(q, val) {
+    answers[q] = val;
+    const block = document.getElementById('qb-' + q);
+    if (block) block.classList.add('answered');
+
+    // Find which section this q belongs to
+    for (let s = 1; s <= 5; s++) {
+      if (sectionMap[s].includes(q)) {
+        const allAnswered = sectionMap[s].every(qn => answers[qn] !== undefined);
+        const btn = document.getElementById('next-' + s);
+        if (btn) btn.disabled = !allAnswered;
+        break;
+      }
+    }
+    updateProgressCount();
+  }
+
+  function updateProgress(section) {
+    const labels = ['','Section 1 of 5','Section 2 of 5','Section 3 of 5','Section 4 of 5','Section 5 of 5'];
+    document.getElementById('sectionLabel').textContent = labels[section];
+    const pct = ((section - 1) / 5) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+  }
+
+  function updateProgressCount() {
+    const answered = Object.keys(answers).length;
+    document.getElementById('progressCount').textContent = answered + ' / ' + totalQ + ' answered';
+    const pct = (answered / totalQ) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+  }
+
+  function showResults() {
+    document.querySelectorAll('.section-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('progressWrap').style.display = 'none';
+    const resultsEl = document.getElementById('results');
+    resultsEl.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Calculate total score
+    let total = 0;
+    for (let q = 1; q <= totalQ; q++) total += (answers[q] || 0);
+    const maxScore = totalQ * 3; // 60
+
+    // Animate score circle
+    const circle = document.getElementById('scoreCircle');
+    const pct = total / maxScore;
+    const circumference = 314;
+    setTimeout(() => {
+      circle.style.transition = 'stroke-dashoffset 1.2s ease';
+      circle.style.strokeDashoffset = circumference - (pct * circumference);
+    }, 100);
+    document.getElementById('scoreNum').textContent = total;
+
+    // Tier
+    let tier, subtitle, tierColor;
+    if (total >= 50) {
+      tier = 'AI Leader'; subtitle = 'Your organisation demonstrates strong readiness across most framework domains. Focus on scaling, measurement, and staying ahead of agentic AI governance.';
+      tierColor = '#C9A84C';
+    } else if (total >= 35) {
+      tier = 'AI Adopter'; subtitle = 'Good foundations in place. Key gaps remain in governance, strategy, or ethical oversight — targeted upskilling will unlock significant ROI.';
+      tierColor = '#2E6DA4';
+    } else if (total >= 20) {
+      tier = 'AI Explorer'; subtitle = 'Early-stage readiness. The framework identifies several critical competency gaps that need addressing before AI can deliver transformative value.';
+      tierColor = '#1A3354';
+    } else {
+      tier = 'AI Lagging'; subtitle = 'Significant readiness gaps across multiple domains. Urgent action is needed to avoid falling further behind competitors already adopting AI at scale.';
+      tierColor = '#5C6878';
+    }
+    document.getElementById('resultsTier').textContent = tier;
+    document.getElementById('resultsTier').style.color = tierColor;
+    document.getElementById('resultsSubtitle').textContent = subtitle;
+
+    // Dimension cards
+    const grid = document.getElementById('dimensionsGrid');
+    grid.innerHTML = '';
+    dimensions.forEach(d => {
+      const dimScore = d.qs.reduce((a, q) => a + (answers[q] || 0), 0);
+      const dimMax = d.qs.length * 3;
+      const dimPct = Math.round((dimScore / dimMax) * 100);
+      let statusLabel, statusClass;
+      if (dimPct >= 75) { statusLabel = '✓ Strong'; statusClass = 'status-strong'; }
+      else if (dimPct >= 45) { statusLabel = '⚡ Developing'; statusClass = 'status-developing'; }
+      else { statusLabel = '⚠ Gap Identified'; statusClass = 'status-gap'; }
+
+      const card = document.createElement('div');
+      card.className = 'dimension-card';
+      card.innerHTML = `
+        <div class="dim-label">${d.label} <span class="dim-pct">${dimPct}%</span></div>
+        <div class="dim-track"><div class="dim-fill ${d.fillClass}" style="width:0%" data-target="${dimPct}"></div></div>
+        <span class="dim-status ${statusClass}">${statusLabel}</span>
+      `;
+      grid.appendChild(card);
+    });
+
+    // Animate bars
+    setTimeout(() => {
+      document.querySelectorAll('.dim-fill').forEach(el => {
+        el.style.width = el.dataset.target + '%';
+      });
+    }, 300);
+
+    // Build recommendations
+    buildRecommendations();
+  }
+
+  function buildRecommendations() {
+    const container = document.getElementById('recommendationsContainer');
+    const priorities = [];
+    const strengths = [];
+    const develops = [];
+
+    dimensions.forEach(d => {
+      const dimScore = d.qs.reduce((a, q) => a + (answers[q] || 0), 0);
+      const dimMax = d.qs.length * 3;
+      const dimPct = (dimScore / dimMax) * 100;
+      if (dimPct < 40) priorities.push(d);
+      else if (dimPct >= 75) strengths.push(d);
+      else develops.push(d);
+    });
+
+    const recs = {
+      tech: { icon: '⚙️', title: 'Build Technical AI Skills across all staff levels', body: 'Start with prompt engineering workshops and low-code tool adoption. The framework is clear: entry-level staff need practical, contextualised training — not abstract vendor courses.' },
+      ethics: { icon: '⚖️', title: 'Establish AI Governance & Ethics Ownership', body: 'Appoint a named AI governance lead. Develop GDPR-compliant AI use policies. Train staff to critically assess and escalate AI outputs — especially in customer-facing and HR contexts.' },
+      leadership: { icon: '🧠', title: 'Develop Executive AI Literacy & Strategy', body: 'Senior leaders must model AI use, not delegate it. Commission a structured AI strategy workshop. Build critical thinking around AI outputs into leadership decision-making practices.' },
+      change: { icon: '🔄', title: 'Create a Structured AI Change Programme', body: 'Map your position on the 9-stage Adoption Pathway. Build an inclusive change plan with dedicated budget, named L&D owners, and resistance management strategies aligned to your culture.' },
+      data: { icon: '📊', title: 'Audit and Improve Data Readiness', body: 'Conduct a data quality audit. Establish clear policies on what data can be used in AI tools. Build measurement frameworks to track AI ROI. Responsible procurement requires assessing vendor AI ethics.' }
+    };
+
+    let html = '';
+
+    if (priorities.length > 0) {
+      html += `<div class="rec-section"><div class="rec-section-title">Priority Actions (Immediate)</div>`;
+      priorities.forEach(d => {
+        const r = recs[d.key];
+        html += `<div class="rec-item priority"><span class="rec-icon">${r.icon}</span><div class="rec-content"><div class="rec-title">${r.title}</div><div class="rec-body">${r.body}</div></div></div>`;
+      });
+      html += `</div>`;
+    }
+
+    if (develops.length > 0) {
+      html += `<div class="rec-section"><div class="rec-section-title">Areas to Develop (Short-term)</div>`;
+      develops.forEach(d => {
+        const r = recs[d.key];
+        html += `<div class="rec-item develop"><span class="rec-icon">${r.icon}</span><div class="rec-content"><div class="rec-title">${r.title}</div><div class="rec-body">${r.body}</div></div></div>`;
+      });
+      html += `</div>`;
+    }
+
+    if (strengths.length > 0) {
+      html += `<div class="rec-section"><div class="rec-section-title">Your Strengths (Maintain & Scale)</div>`;
+      strengths.forEach(d => {
+        const r = recs[d.key];
+        html += `<div class="rec-item strength"><span class="rec-icon">${r.icon}</span><div class="rec-content"><div class="rec-title">${r.title}</div><div class="rec-body">Strong foundation — focus on scaling this capability, contributing to peer learning, and using it to lead cross-functional AI adoption.</div></div></div>`;
+      });
+      html += `</div>`;
+    }
+
+    container.innerHTML = html;
+  }
+
+  function restartAssessment() {
+    for (let q = 1; q <= totalQ; q++) {
+      delete answers[q];
+      document.querySelectorAll(`input[name="q${q}"]`).forEach(r => r.checked = false);
+      const block = document.getElementById('qb-' + q);
+      if (block) block.classList.remove('answered');
+    }
+    for (let s = 1; s <= 5; s++) {
+      const btn = document.getElementById('next-' + s);
+      if (btn) btn.disabled = true;
+    }
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('progressWrap').style.display = 'flex';
+    document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('progressCount').textContent = '0 / 20 answered';
+    document.getElementById('intro').style.display = 'block';
+    document.getElementById('progressWrap').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
